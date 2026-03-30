@@ -22,7 +22,7 @@ COPY packages/xth/package.json   ./packages/xth/
 
 # 安装全量依赖（只要 lockfile/package.json 不变，这层直接命中缓存）
 # --ignore-scripts 跳过 postinstall (simple-git-hooks) 和 preinstall (only-allow) 避免报错
-RUN pnpm install --frozen-lockfile --ignore-scripts --registry=${NPM_REGISTRY}
+RUN pnpm install --no-frozen-lockfile --ignore-scripts --registry=${NPM_REGISTRY}
 
 # ── 再复制源码 ──
 COPY . .
