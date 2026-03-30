@@ -323,13 +323,6 @@ function getNextTime(inTime: number) {
   overflow: hidden;
 }
 
-@media (max-width: 600px) {
-  .sync-page {
-    height: auto;
-    overflow: visible;
-  }
-}
-
 /* ── 顶部标题栏 ── */
 .sync-topbar {
   display: flex;
@@ -428,91 +421,6 @@ function getNextTime(inTime: number) {
   line-height: 1;
 }
 
-/* ── 移动端覆盖：统计卡片改为横向单行，内容紧凑 ── */
-@media (max-width: 600px) {
-  .sync-topbar {
-    padding: 12px 8px 0;
-  }
-  .sync-title {
-    font-size: 18px;
-  }
-  .sync-stats {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-    padding: 8px 8px 0;
-  }
-  .sync-stat-card {
-    padding: 7px 8px;
-    gap: 7px;
-    flex-direction: row;
-    align-items: center;
-  }
-  .sync-stat-icon {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    flex-shrink: 0;
-  }
-  .sync-stat-icon svg,
-  .sync-stat-icon .iconfont {
-    font-size: 14px;
-  }
-  .sync-stat-label {
-    font-size: 10px;
-    white-space: nowrap;
-    overflow: visible;
-    margin-bottom: 2px;
-  }
-  .sync-stat-num {
-    font-size: 18px;
-    line-height: 1;
-  }
-  .sync-list {
-    padding: 10px 8px 16px;
-  }
-  .sync-card-hd {
-    padding: 8px 10px;
-    flex-wrap: nowrap;
-    gap: 6px;
-  }
-  /* 标题区（左侧）不换行，超出截断 */
-  .sync-card-hd-info {
-    flex-wrap: nowrap;
-    overflow: hidden;
-    flex: 1;
-    min-width: 0;
-    gap: 5px;
-  }
-  .sync-card-name {
-    font-size: 13px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    min-width: 0;
-    flex-shrink: 1;
-  }
-  /* badge 压缩 */
-  .sync-badge {
-    font-size: 10px;
-    padding: 2px 5px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  /* 操作按钮区不换行、不压缩 */
-  .sync-card-hd-actions {
-    flex-shrink: 0;
-    flex-wrap: nowrap;
-    gap: 4px;
-  }
-  .card-icon-btn {
-    width: 26px;
-    height: 26px;
-    padding: 0;
-  }
-  .sync-card-body {
-    padding: 8px 10px;
-  }
-}
 .sync-stat-num-default { color: var(--text-primary); }
 .sync-stat-num-up      { color: #f97316; }
 .sync-stat-num-down    { color: var(--accent); }
@@ -665,5 +573,94 @@ function getNextTime(inTime: number) {
   color: var(--text-muted);
   font-size: 13px;
   padding: 8px 0;
+}
+
+/* ── 移动端覆盖（必须放最后，避免被上面基础样式覆盖）── */
+@media (max-width: 600px) {
+  .sync-page {
+    height: auto;
+    overflow: visible;
+  }
+  .sync-topbar {
+    padding: 12px 8px 0;
+  }
+  .sync-title {
+    font-size: 18px;
+  }
+  .sync-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 8px 8px 0;
+  }
+  .sync-stat-card {
+    padding: 7px 8px;
+    gap: 7px;
+    flex-direction: row;
+    align-items: center;
+  }
+  .sync-stat-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .sync-stat-icon svg,
+  .sync-stat-icon .iconfont {
+    font-size: 14px;
+  }
+  .sync-stat-label {
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: visible;
+    margin-bottom: 2px;
+  }
+  .sync-stat-num {
+    font-size: 18px;
+    line-height: 1;
+  }
+  .sync-list {
+    padding: 10px 8px 16px;
+    overflow-y: visible;
+    flex: none;
+  }
+  .sync-card-hd {
+    padding: 8px 10px;
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+  .sync-card-hd-info {
+    flex-wrap: nowrap;
+    overflow: hidden;
+    flex: 1;
+    min-width: 0;
+    gap: 5px;
+  }
+  .sync-card-name {
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    flex-shrink: 1;
+  }
+  .sync-badge {
+    font-size: 10px;
+    padding: 2px 5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .sync-card-hd-actions {
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+  .card-icon-btn {
+    width: 26px;
+    height: 26px;
+    padding: 0;
+  }
+  .sync-card-body {
+    padding: 8px 10px;
+  }
 }
 </style>
