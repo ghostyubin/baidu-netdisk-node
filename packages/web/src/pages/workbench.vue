@@ -195,7 +195,7 @@
 
       <!-- Page content -->
       <main class="wb-main-content flex flex-1 flex-col">
-        <router-view v-slot="{ Component }">
+        <router-view v-slot="{ Component }" style="display:contents">
           <component
             :is="Component"
             :user-app-name="user.app_name"

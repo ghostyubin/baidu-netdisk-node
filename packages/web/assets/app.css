@@ -234,8 +234,9 @@ body {
     padding-bottom: var(--bottom-nav-h) !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    height: 0;        /* flex:1 + height:0 = 触发 overflow-y:auto 真正限高滚动 */
-    flex: 1 1 0 !important;
+    display: block !important;   /* 不再是 flex 列，让子内容自然撑高 */
+    flex: 1 1 0 !important;      /* 仍作为 wb-main-area 的 flex 子项占满剩余高度 */
+    height: 0;
   }
 }
 
