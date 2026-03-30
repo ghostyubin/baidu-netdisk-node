@@ -27,7 +27,15 @@ RUN pnpm install --no-frozen-lockfile --ignore-scripts --registry=${NPM_REGISTRY
 # ── 再复制源码 ──
 COPY . .
 
-# 构建
+# 先构建 api/sdk（产物输出到各自的 dist/）
+RUN pnpm build api sdk
+
+# 把 api/sdk 的 dist 产物拷回包根目录
+# （monorepo workspace 引用的是根目录的 index.js，而构建产物在 dist/）
+RUN cp -r /app/packages/api/dist/. /app/packages/api/ && \
+    cp -r /app/packages/sdk/dist/. /app/packages/sdk/
+
+# 再构建 srv/web
 RUN pnpm build srv web
 
 # 用 pnpm deploy 把 srv 的生产依赖（含 workspace 包）打包到独立目录
