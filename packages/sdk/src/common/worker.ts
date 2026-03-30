@@ -1,4 +1,3 @@
-import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { MessagePort, Worker } from 'node:worker_threads'
@@ -112,11 +111,17 @@ const __DIRNAME__ = path.dirname(fileURLToPath(import.meta.url))
 const __WORKER_CACHE__: Map<string, string> = new Map()
 const __WORKER_LOADER__ = path.resolve(__DIRNAME__, '../workers/_loader')
 
+// 通过当前文件自身扩展名判断运行模式：
+// 开发模式下 tsx 直接运行 .ts 源文件，import.meta.url 以 .ts 结尾；
+// 生产模式下运行编译后的 .js，import.meta.url 以 .js 结尾。
+// 用此方式代替 fs.existsSync('.ts')，避免生产环境 src/ 目录残留 .ts 文件时误判。
+const __IS_TS_RUNTIME__ = import.meta.url.endsWith('.ts')
+
 export function newWorker<T>(inWorkerName: string, inWorkerData: T) {
   const workerPath = path.resolve(__DIRNAME__, `../workers/${inWorkerName}`)
 
   if (!__WORKER_CACHE__.get(workerPath)) {
-    __WORKER_CACHE__.set(workerPath, fs.existsSync(workerPath + '.ts') ? 'ts' : 'js')
+    __WORKER_CACHE__.set(workerPath, __IS_TS_RUNTIME__ ? 'ts' : 'js')
   }
 
   const workerCache = __WORKER_CACHE__.get(workerPath)

@@ -45,6 +45,16 @@ RUN pnpm --filter baidu-netdisk-srv deploy --prod /deploy/srv
 # 把编译产物覆盖进 deploy 目录（deploy 命令只含 node_modules，不含 dist）
 RUN cp -r /app/packages/srv/dist/. /deploy/srv/
 
+# 删除 sdk 的 .ts 源文件（覆盖顶层软链接路径和 .pnpm 虚拟存储真实路径）：
+# worker.ts 里有 "if (.ts exists) → 用 tsx 加载" 的逻辑，
+# 生产环境没有 tsx，所以必须确保 workers/ 目录下只有 .js 文件。
+# pnpm deploy 生成的 node_modules 里顶层的 baidu-netdisk-sdk 是软链接，
+# 真实文件在 .pnpm/baidu-netdisk-sdk@.../node_modules/baidu-netdisk-sdk/src/ 下，
+# 同时删两处，确保任何路径下均无 .ts 文件。
+RUN find -L /deploy/srv/node_modules/baidu-netdisk-sdk/src -name "*.ts" -delete ; \
+    find /deploy/srv/node_modules/.pnpm -path "*/baidu-netdisk-sdk/src/*.ts" -delete ; \
+    true
+
 # ────────────────────────────────────────────
 # Stage 2: 生产镜像（只保留运行时必要文件）
 # ────────────────────────────────────────────

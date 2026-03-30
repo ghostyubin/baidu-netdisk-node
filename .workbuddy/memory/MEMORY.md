@@ -29,6 +29,13 @@
 - 预览文件：`brain/<conv-id>/ui-preview.html`（standalone HTML，无需构建）
 - 设计方向：左侧边栏布局、深色渐变卡片头、CSS 变量设计 token、accent #4f6ef7
 
+## tsx Worker Bug 根本修复（2026-03-31）
+
+- **问题**：生产容器报 `ERR_MODULE_NOT_FOUND: Cannot find package 'tsx'`，同步任务无法启动
+- **根本原因**：`sdk/src/common/worker.ts` 原来用 `fs.existsSync(workerPath + '.ts')` 判断运行模式，`pnpm deploy` 把 `sdk/src/` 整个带进容器导致误判
+- **根本修复**：改为 `import.meta.url.endsWith('.ts')` 判断（生产环境运行 `.js`，此值永远为 false，不会走 tsx 路径）
+- **保底修复**：Dockerfile 里同时保留 `find -L ... -delete` + `.pnpm` 目录两处删除 `.ts` 文件，防止其他潜在路径
+
 ## UI 改动已落地到实际 Vue 组件（2026-03-31）
 
 已修改文件列表：

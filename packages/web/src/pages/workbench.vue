@@ -61,10 +61,24 @@
               @mouseenter="e => (e.currentTarget.style.background = 'var(--surface-2)')"
               @mouseleave="e => (e.currentTarget.style.background = '')"
             >
+              <!-- 有头像时显示图片，无头像时显示渐变圆+首字母 -->
               <img
+                v-if="user.avatar_url"
                 class="h-32 w-32 rounded-full"
-                :src="user.avatar_url || 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\'%3E%3Ccircle cx=\'12\' cy=\'12\' r=\'12\' fill=\'%234f6ef7\'/%3E%3C/svg%3E'"
+                style="flex-shrink: 0; object-fit: cover"
+                :src="user.avatar_url"
               />
+              <div
+                v-else
+                style="
+                  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+                  background: linear-gradient(135deg, #4f6ef7, #a78bfa);
+                  display: flex; align-items: center; justify-content: center;
+                  font-size: 14px; color: white; font-weight: 700;
+                "
+              >
+                {{ (user.netdisk_name || '?').charAt(0).toUpperCase() }}
+              </div>
               <div style="flex: 1; min-width: 0">
                 <div
                   style="font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
