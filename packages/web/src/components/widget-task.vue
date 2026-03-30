@@ -63,9 +63,13 @@
       <div class="flex-1">
         <div
           v-if="props.stepStatus === EStepStatus.RUNNING"
-          class="flex items-center justify-end"
+          class="flex items-center justify-end gap-12"
         >
-          <span class="mr-8">{{ percentage.toFixed(2) }}%</span>
+          <span
+            v-if="speedText"
+            class="task-speed-badge"
+          >{{ speedText }}</span>
+          <span class="task-pct">{{ percentage.toFixed(2) }}%</span>
         </div>
         <div
           v-if="props.stepStatus === EStepStatus.STOPPED"
@@ -87,7 +91,7 @@ import Message from '@src/ui-components/message'
 import Progress from '@src/ui-components/progress.vue'
 import { EDownloadSteps, EStepStatus, EUploadSteps } from 'baidu-netdisk-sdk/types'
 import { type IHttpTaskInfoItem } from 'baidu-netdisk-srv/types'
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 type IProps = IHttpTaskInfoItem & {
   type: 'upload' | 'download'
@@ -203,4 +207,77 @@ const percentage = computed(() => {
     return (props.downBytes / props.comSize) * 100
   }
 })
+
+// ── 速度计算 ──
+// 记录上一次轮询时的 bytes 值和时间戳，diff / dt = 速度
+const _prevBytes = ref(0)
+const _prevTime = ref(Date.now())
+const speedText = ref('')
+
+// 当前任务的有效字节数（根据类型和步骤取 upBytes 或 downBytes）
+const activeBytes = computed(() => {
+  if (props.type === 'upload') {
+    return props.stepId === EUploadSteps.VERIFY_DOWNLOAD ? props.downBytes : props.upBytes
+  }
+  return props.downBytes
+})
+
+watch(activeBytes, (newVal) => {
+  const now = Date.now()
+  const dt = (now - _prevTime.value) / 1000  // 秒
+
+  if (dt > 0.2 && props.stepStatus === EStepStatus.RUNNING) {
+    const diff = newVal - _prevBytes.value
+    if (diff > 0) {
+      speedText.value = formatSpeed(diff / dt)
+    } else if (diff === 0) {
+      // bytes 没变化时保留上次速度，不清零（避免闪烁）
+    }
+  }
+
+  _prevBytes.value = newVal
+  _prevTime.value = now
+})
+
+// 状态变为非运行时清空速度
+watch(() => props.stepStatus, (s) => {
+  if (s !== EStepStatus.RUNNING) {
+    speedText.value = ''
+    _prevBytes.value = 0
+    _prevTime.value = Date.now()
+  }
+})
+
+function formatSpeed(bytesPerSec: number): string {
+  if (bytesPerSec >= 1024 * 1024 * 1024) {
+    return (bytesPerSec / (1024 * 1024 * 1024)).toFixed(1) + ' GB/s'
+  }
+  if (bytesPerSec >= 1024 * 1024) {
+    return (bytesPerSec / (1024 * 1024)).toFixed(1) + ' MB/s'
+  }
+  if (bytesPerSec >= 1024) {
+    return (bytesPerSec / 1024).toFixed(1) + ' KB/s'
+  }
+  return bytesPerSec.toFixed(0) + ' B/s'
+}
 </script>
+
+<style scoped>
+.task-speed-badge {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--accent, #4f6ef7);
+  background: color-mix(in srgb, var(--accent, #4f6ef7) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent, #4f6ef7) 25%, transparent);
+  border-radius: 4px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+.task-pct {
+  font-size: 12px;
+  color: var(--text-muted, #9ca3af);
+  white-space: nowrap;
+}
+</style>
