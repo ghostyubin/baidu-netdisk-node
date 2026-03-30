@@ -326,7 +326,6 @@ function getNextTime(inTime: number) {
 @media (max-width: 600px) {
   .sync-page {
     height: auto;
-    min-height: 100%;
     overflow: visible;
   }
 }
@@ -432,7 +431,7 @@ function getNextTime(inTime: number) {
 /* ── 移动端覆盖：统计卡片改为横向单行，内容紧凑 ── */
 @media (max-width: 600px) {
   .sync-topbar {
-    padding: 14px 16px 0;
+    padding: 12px 8px 0;
   }
   .sync-title {
     font-size: 18px;
@@ -440,7 +439,7 @@ function getNextTime(inTime: number) {
   .sync-stats {
     grid-template-columns: repeat(3, 1fr);
     gap: 6px;
-    padding: 8px 12px 0;
+    padding: 8px 8px 0;
   }
   .sync-stat-card {
     padding: 7px 8px;
@@ -469,7 +468,7 @@ function getNextTime(inTime: number) {
     line-height: 1;
   }
   .sync-list {
-    padding: 12px 16px 16px;
+    padding: 10px 8px 16px;
   }
   .sync-card-hd {
     padding: 8px 10px;
