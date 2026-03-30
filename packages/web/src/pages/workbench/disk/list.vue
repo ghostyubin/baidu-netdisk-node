@@ -1,58 +1,72 @@
 <template>
   <div class="flex flex-1 flex-col">
-    <div class="shadow-light">
+    <div
+      style="background: var(--surface); border-bottom: 1px solid var(--border); box-shadow: var(--shadow-sm); flex-shrink: 0"
+    >
       <div
-        class="mx-auto pb-8 pt-16"
-        :class="config.isMobile ? 'max-w-full px-8' : 'max-w-[1280px]'"
+        class="mx-auto pb-10 pt-14"
+        :class="config.isMobile ? 'max-w-full px-10' : 'max-w-[1280px] px-16'"
       >
-        <div class="mb-16 flex items-center gap-8">
-          <div
-            class="rounded-3"
-            :class="{ 'bg-gray-200': view === 'list' }"
+        <!-- View controls -->
+        <div class="mb-12 flex items-center gap-6">
+          <button
+            class="disk-view-btn"
+            :class="{ active: view === 'list' }"
+            @click="view = 'list'"
           >
-            <IconButton
-              icon-class="icon-listview"
-              @click="view = 'list'"
-            />
-          </div>
-          <div
-            class="rounded-3"
-            :class="{ 'bg-gray-200': view === 'grid' }"
+            <i class="iconfont icon-listview" style="font-size: 16px"></i>
+          </button>
+          <button
+            class="disk-view-btn"
+            :class="{ active: view === 'grid' }"
+            @click="view = 'grid'"
           >
-            <IconButton
-              icon-class="icon-gridview"
-              @click="view = 'grid'"
-            />
-          </div>
+            <i class="iconfont icon-gridview" style="font-size: 16px"></i>
+          </button>
 
-          <IconButton
-            icon-class="icon-refresh"
+          <div style="width: 1px; height: 18px; background: var(--border); margin: 0 2px"></div>
+
+          <button
+            class="disk-view-btn"
+            title="刷新"
             @click="onRefreshClick"
-          />
+          >
+            <i class="iconfont icon-refresh" style="font-size: 16px"></i>
+          </button>
         </div>
 
-        <div class="flex gap-8">
-          <IconButton
-            icon-class="icon-arrow-up"
-            class="-rotate-90"
+        <!-- Breadcrumb -->
+        <div class="flex items-center gap-6">
+          <button
+            class="disk-view-btn"
+            :style="{ opacity: path !== '/' ? 1 : 0.35, cursor: path !== '/' ? 'pointer' : 'default' }"
             @click="path !== '/' && paths.pop()"
-          />
+          >
+            <i class="iconfont icon-arrow-up" style="font-size: 15px; transform: rotate(-90deg)"></i>
+          </button>
 
-          <div class="flex flex-1 flex-wrap items-center leading-[30px]">
-            <div
+          <div
+            class="flex flex-1 flex-wrap items-center gap-2"
+            style="font-size: 13px; color: var(--text-secondary); line-height: 28px"
+          >
+            <template
               v-for="(item, i) in paths"
               :key="i"
-              class="has-hover:hover:text-blue-600 cursor-pointer"
-              @click="paths = paths.slice(0, i + 1)"
             >
-              <span>{{ item.name }}</span>
+              <span
+                class="breadcrumb-seg"
+                :class="{ last: i === paths.length - 1 }"
+                @click="paths = paths.slice(0, i + 1)"
+              >
+                {{ item.name }}
+              </span>
               <span
                 v-if="i < paths.length - 1"
-                class="pl-4 pr-8"
+                style="color: var(--text-muted); font-size: 12px; user-select: none"
               >
-                >
+                /
               </span>
-            </div>
+            </template>
           </div>
         </div>
       </div>
@@ -352,3 +366,46 @@ watch(
   { immediate: true }
 )
 </script>
+
+<style scoped>
+.disk-view-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+.disk-view-btn:hover,
+.disk-view-btn.active {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+.breadcrumb-seg {
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 1px 4px;
+  transition: color 0.15s, background 0.15s;
+}
+.breadcrumb-seg:hover {
+  color: var(--accent);
+  background: var(--accent-light);
+}
+.breadcrumb-seg.last {
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: default;
+}
+.breadcrumb-seg.last:hover {
+  background: transparent;
+  color: var(--text-primary);
+}
+</style>
+

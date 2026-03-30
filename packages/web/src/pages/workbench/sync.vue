@@ -2,16 +2,19 @@
   <div class="flex-1 overflow-auto pt-16">
     <div
       class="mx-auto"
-      :class="config.isMobile ? 'max-w-full' : 'max-w-[1280px]'"
+      :class="config.isMobile ? 'max-w-full px-8' : 'max-w-[1280px] px-16'"
     >
       <div v-if="folders.length">
         <div
           v-for="folder in folders"
           :key="folder.id"
-          class="mb-16 border-gray-200"
-          :class="config.isMobile ? 'border-b' : 'border'"
+          class="mb-16 overflow-hidden"
+          style="border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow-md); border: 1px solid var(--border)"
         >
-          <div class="flex items-center justify-between bg-gray-800 p-8">
+          <div
+            class="flex items-center justify-between p-10"
+            style="background: linear-gradient(135deg, var(--card-hd-from), var(--card-hd-to))"
+          >
             <div class="flex items-center gap-16">
               <div class="text-white">目录</div>
               <Tooltip>
@@ -200,9 +203,11 @@
 
       <div
         v-else
-        class="pb-16 pt-16 text-center text-gray-400"
+        class="flex flex-col items-center justify-center py-48"
+        style="color: var(--text-muted)"
       >
-        无目录
+        <i class="iconfont icon-empty" style="font-size: 72px; margin-bottom: 12px; opacity: 0.4"></i>
+        <div>暂无同步目录</div>
       </div>
     </div>
 

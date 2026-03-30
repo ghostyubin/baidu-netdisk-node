@@ -1,5 +1,13 @@
 <template>
-  <div class="z-[1] border border-gray-200 p-8">
+  <div
+    style="
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      padding: 10px 12px;
+      box-shadow: var(--shadow-sm);
+    "
+  >
     <div class="direction mb-8 flex items-center">
       <i
         v-if="type === 'upload'"
@@ -37,6 +45,7 @@
 
     <Progress
       :percentage="percentage"
+      :type="props.type"
       class="mb-8"
     ></Progress>
 

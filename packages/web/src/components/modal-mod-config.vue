@@ -6,22 +6,23 @@
     @ok="onOkThis"
     @cancel="props.onCancel?.()"
   >
-    <div class="flex-1 overflow-y-auto">
-      <div :class="getFormItemClass()">
-        <div :class="getFormItemLabelClass()">
-          <div>尝试次数</div>
-          <Tooltip type="question">
-            <div>上传/下载 请求最多进行的次数</div>
-            <div>用于降低网络波动对任务的影响</div>
-          </Tooltip>
+    <div class="flex-1 overflow-y-auto px-4 py-4">
+      <div class="config-form-grid">
+        <div :class="getFormItemClass()">
+          <div :class="getFormItemLabelClass()">
+            <div>尝试次数</div>
+            <Tooltip type="question">
+              <div>上传/下载 请求最多进行的次数</div>
+              <div>用于降低网络波动对任务的影响</div>
+            </Tooltip>
+          </div>
+          <div class="flex-1">
+            <InputNumber
+              v-model:value="globalConfig.tryTimes"
+              class="w-full"
+            />
+          </div>
         </div>
-        <div class="flex-1">
-          <InputNumber
-            v-model:value="globalConfig.tryTimes"
-            class="w-full"
-          />
-        </div>
-      </div>
       <div :class="getFormItemClass()">
         <div :class="getFormItemLabelClass()">
           <div>尝试间隔</div>
@@ -199,10 +200,11 @@
           />
         </div>
       </div>
-      <div :class="getFormItemClass()">
-        <div :class="getFormItemLabelClass()"></div>
-        <div class="text-12px text-gray-400">部分设置需要重启服务后生效</div>
-      </div>
+        <div :class="getFormItemClass()">
+          <div :class="getFormItemLabelClass()"></div>
+          <div class="text-12px text-gray-400">部分设置需要重启服务后生效</div>
+        </div>
+      </div><!-- /config-form-grid -->
     </div>
   </Modal>
 </template>
@@ -272,12 +274,26 @@ const trueOrFalseOptions = [
 ]
 
 function getFormItemClass() {
-  return config.isMobile ? 'mb-16' : 'mb-8 flex items-center'
+  return config.isMobile
+    ? 'mb-14'
+    : 'config-form-item mb-10 flex items-center'
 }
 
 function getFormItemLabelClass() {
   return config.isMobile
-    ? 'w-[132px] flex items-center mb-8'
-    : 'mr-8 w-[132px] flex items-center justify-end'
+    ? 'mb-6 flex items-center gap-4 text-13 font-medium'
+    : 'mr-10 w-[120px] flex items-center justify-end gap-4 text-13 text-right flex-shrink-0'
 }
 </script>
+
+<style scoped>
+/* Desktop: 2-column grid for the form body */
+@media (min-width: 480px) {
+  .config-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 16px;
+  }
+}
+</style>
+

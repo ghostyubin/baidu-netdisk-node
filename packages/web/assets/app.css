@@ -2,6 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   Design Tokens
+   ============================================================ */
+:root {
+  /* Brand */
+  --accent:          #4f6ef7;
+  --accent-hover:    #3b5be8;
+  --accent-light:    rgba(79, 110, 247, 0.12);
+
+  /* Backgrounds */
+  --bg:              #f5f6fa;
+  --surface:         #ffffff;
+  --surface-2:       #f0f1f5;
+
+  /* Text */
+  --text-primary:    rgba(3, 7, 18, 1);
+  --text-secondary:  #64748b;
+  --text-muted:      #94a3b8;
+
+  /* Border */
+  --border:          rgba(226, 232, 240, 1);
+  --border-light:    rgba(226, 232, 240, 0.6);
+
+  /* Card header (dark gradient) */
+  --card-hd-from:    #1e293b;
+  --card-hd-to:      #334155;
+
+  /* Radius */
+  --radius-sm:       6px;
+  --radius-md:       10px;
+  --radius-lg:       14px;
+  --radius-xl:       20px;
+
+  /* Shadow */
+  --shadow-sm:       0 1px 4px 0 rgba(99, 99, 99, 0.10);
+  --shadow-md:       0 2px 12px 0 rgba(79, 110, 247, 0.10);
+  --shadow-lg:       0 4px 24px 0 rgba(79, 110, 247, 0.14);
+
+  /* Layout */
+  --sidebar-width:   220px;
+  --bottom-nav-h:    58px;
+  --topbar-h:        48px;
+}
+
 @font-face {
   font-family: 'logo';
   src: url('@assets/HKGrotesk.woff2') format('woff2');
@@ -29,7 +73,8 @@ body,
 
 body {
   font-family: 'global';
-  color: rgba(3, 7, 18, 1);
+  color: var(--text-primary);
+  background: var(--bg);
 }
 
 * {
@@ -38,6 +83,140 @@ body {
   min-width: 0;
   min-height: 0;
   overflow: hidden;
+}
+
+/* ============================================================
+   Workbench Layout
+   ============================================================ */
+
+/* Sidebar */
+.wb-sidebar {
+  width: var(--sidebar-width);
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease;
+  z-index: 200;
+}
+
+/* Sidebar overlay (mobile) */
+.wb-sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 199;
+  transition: opacity 0.25s ease;
+  opacity: 0;
+}
+.wb-sidebar-overlay.open {
+  opacity: 1;
+}
+
+/* Bottom nav (mobile only) */
+.wb-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--bottom-nav-h);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  z-index: 200;
+  align-items: stretch;
+}
+.wb-bottom-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  transition: color 0.15s;
+}
+.wb-bottom-nav-item.active,
+.wb-bottom-nav-item:hover {
+  color: var(--accent);
+}
+.wb-bottom-nav-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* Hamburger trigger (mobile) */
+.wb-hamburger {
+  display: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+}
+
+/* Card with dark gradient header */
+.card-dark-hd {
+  background: linear-gradient(135deg, var(--card-hd-from), var(--card-hd-to));
+  color: #fff;
+}
+
+/* ============================================================
+   Accent button helper
+   ============================================================ */
+.btn-accent {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-xl);
+  padding: 8px 24px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-accent:hover {
+  background: var(--accent-hover);
+}
+
+/* ============================================================
+   Responsive Breakpoints
+   ============================================================ */
+
+/* Tablet (≤ 768px) */
+@media (max-width: 768px) {
+  .wb-hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Phone (≤ 600px) */
+@media (max-width: 600px) {
+  .wb-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+  }
+  .wb-sidebar.open {
+    transform: translateX(0);
+    box-shadow: var(--shadow-lg);
+  }
+  .wb-sidebar-overlay {
+    display: block;
+  }
+  .wb-bottom-nav {
+    display: flex;
+  }
+  /* Push content above bottom nav */
+  .wb-main-content {
+    padding-bottom: var(--bottom-nav-h) !important;
+  }
 }
 
 .flow-bg {
