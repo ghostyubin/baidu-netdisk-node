@@ -13,9 +13,14 @@
 - 2026-03-31：已将 GitHub Actions 工作流从 DockerHub 改为推送到 ghcr.io
   - 使用 `secrets.GITHUB_TOKEN` 鉴权，无需额外配置 secrets
   - 镜像地址：`ghcr.io/<owner>/baidu-netdisk-sync` 和 `ghcr.io/<owner>/baidu-netdisk-auth`
-  - 触发方式：手动 workflow_dispatch + push tag（`srv-v*` / `xth-v*`）
+  - 触发方式：手动 workflow_dispatch + push tag（`srv-v*` / `xth-v*`）+ push 任意分支
+  - `run-name` 设为 `${{ github.event.head_commit.message }}`，Action 标题显示 commit message
+  - 推送策略：只有 main 分支或 tag 才真正 push 镜像到 ghcr.io；其他分支 push 仅构建验证（不推送）
+  - 版本号：手动维护 packages/srv/package.json 的 version 字段，merge job 用该值打 tag
 - 2026-03-31：大幅优化构建速度
-  - **Dockerfile** 改为多阶段构建：先 COPY `package.json`+lockfile 安装依赖（可缓存），再 COPY 源码构建，最后产物拷入纯净 runtime 镜像
+  - **Dockerfile** 改为多阶段构建：先 COPY `package.json`+lockfile 安装依赖（可缓存），再 COPY 源码构建，最后用 `pnpm deploy --prod` 打包产物+生产依赖拷入纯净 runtime 镜像
+    - `pnpm install` 必须加 `--ignore-scripts`，否则 `postinstall: simple-git-hooks` 和 `preinstall: only-allow` 在无 git 环境下报错
+    - Stage 2 用 `pnpm deploy` 而非手动 `pnpm install --prod`，自动解析 `workspace:*` 依赖，避免缺少 monorepo 上下文报错
   - **Workflow** 改为矩阵并行策略：amd64 用 `ubuntu-latest`（原生），arm64 用 `ubuntu-24.04-arm`（GHA 原生 arm64，免费），armv7 在 arm64 runner 上跑 QEMU（比 amd64 模拟快很多）；三平台并行后 `merge` job 用 `imagetools create` 合并 manifest
   - 镜像层缓存改为 `type=registry`，每个平台独立缓存 tag（`cache-amd64`/`cache-arm64`/`cache-armv7`），跨 run 命中率更高
 
