@@ -57,7 +57,7 @@
           @click="sidebarOpen = false"
         >
           <i class="iconfont icon-download wb-nav-icon"></i>
-          <span class="wb-nav-text">传输任务</span>
+          <span class="wb-nav-text">下载任务</span>
         </router-link>
 
         <!-- 系统分组 -->
@@ -184,17 +184,17 @@
         </span>
         <div style="flex: 1"></div>
         <button
-          class="wb-hamburger"
+          class="wb-hamburger wb-topbar-about"
           style="flex-shrink: 0"
-          title="添加同步目录"
-          @click="folderDialogVisible = true"
+          title="关于"
+          @click="aboutDialogVisible = true"
         >
-          <i class="iconfont icon-add-folder" style="font-size: 20px"></i>
+          <span class="wb-nav-i-icon" style="font-size: 15px; width: 22px; height: 22px; border-radius: 50%; border: 2px solid currentColor; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; line-height: 1">i</span>
         </button>
       </header>
 
       <!-- Page content -->
-      <main class="wb-main-content flex flex-1 flex-col" style="overflow: hidden">
+      <main class="wb-main-content flex flex-1 flex-col">
         <router-view v-slot="{ Component }">
           <component
             :is="Component"
@@ -213,30 +213,33 @@
         @click="goTo(`/workbench/sync${currentSearchParams}`)"
       >
         <i class="iconfont icon-arrow-up-down wb-bottom-nav-icon"></i>
-        <span>同步</span>
+        <span>同步任务</span>
       </button>
       <button
+
         class="wb-bottom-nav-item"
         :class="{ active: isCurrentPath('/workbench/disk') && !isCurrentPath('/workbench/disk/tasks') }"
         @click="goTo(`/workbench/disk${currentSearchParams}`)"
       >
         <i class="iconfont icon-cloud wb-bottom-nav-icon"></i>
-        <span>网盘</span>
+        <span>网盘文件</span>
       </button>
       <button
+
         class="wb-bottom-nav-item"
         :class="{ active: isCurrentPath('/workbench/disk/tasks') }"
         @click="goTo(`/workbench/disk/tasks${currentSearchParams}`)"
       >
         <i class="iconfont icon-download wb-bottom-nav-icon"></i>
-        <span>传输</span>
+        <span>下载任务</span>
       </button>
       <button
+
         class="wb-bottom-nav-item"
         @click="modConfigDialogVisible = true"
       >
         <i class="iconfont icon-options wb-bottom-nav-icon"></i>
-        <span>设置</span>
+        <span>全局设置</span>
       </button>
     </nav>
   </div>

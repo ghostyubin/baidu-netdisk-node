@@ -298,4 +298,13 @@ function formatSpeed(bytesPerSec: number): string {
   background: color-mix(in srgb, var(--accent) 10%, transparent);
   color: var(--accent);
 }
+
+@media (max-width: 600px) {
+  .task-card {
+    padding: 10px 12px 8px;
+  }
+  .task-err {
+    max-width: 120px;
+  }
+}
 </style>

@@ -323,6 +323,14 @@ function getNextTime(inTime: number) {
   overflow: hidden;
 }
 
+@media (max-width: 600px) {
+  .sync-page {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+}
+
 /* ── 顶部标题栏 ── */
 .sync-topbar {
   display: flex;
@@ -419,6 +427,48 @@ function getNextTime(inTime: number) {
   font-size: 28px;
   font-weight: 700;
   line-height: 1;
+}
+
+/* ── 移动端覆盖：统计卡片改为横向单行，内容紧凑 ── */
+@media (max-width: 600px) {
+  .sync-topbar {
+    padding: 14px 16px 0;
+  }
+  .sync-title {
+    font-size: 18px;
+  }
+  .sync-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 12px 16px 0;
+  }
+  .sync-stat-card {
+    padding: 10px 10px;
+    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .sync-stat-icon {
+    width: 32px;
+    height: 32px;
+  }
+  .sync-stat-label {
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: visible;
+  }
+  .sync-stat-num {
+    font-size: 22px;
+  }
+  .sync-list {
+    padding: 12px 16px 16px;
+  }
+  .sync-card-hd {
+    padding: 10px 12px;
+  }
+  .sync-card-body {
+    padding: 10px 12px;
+  }
 }
 .sync-stat-num-default { color: var(--text-primary); }
 .sync-stat-num-up      { color: #f97316; }

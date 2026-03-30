@@ -134,7 +134,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 2px;
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-muted);
   cursor: pointer;
   border: none;
@@ -146,7 +146,7 @@ body {
   color: var(--accent);
 }
 .wb-bottom-nav-icon {
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1;
 }
 
@@ -179,6 +179,11 @@ body {
 }
 .btn-accent:hover {
   background: var(--accent-hover);
+}
+
+/* Main content area */
+.wb-main-content {
+  overflow: hidden;
 }
 
 /* ============================================================
@@ -216,6 +221,8 @@ body {
   /* Push content above bottom nav */
   .wb-main-content {
     padding-bottom: var(--bottom-nav-h) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
   }
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-1 flex-col overflow-auto">
-    <div class="shadow-light">
+    <div class="shadow-light disk-tab-bar">
       <div
         class="mx-auto flex h-48 items-center gap-16"
         :class="config.isMobile ? 'ml-8 max-w-full' : 'max-w-[1280px]'"
@@ -54,3 +54,11 @@ const currentSearchParams = computed(() => {
   return window.location.search || ''
 })
 </script>
+
+<style scoped>
+@media (max-width: 600px) {
+  .disk-tab-bar {
+    display: none;
+  }
+}
+</style>
