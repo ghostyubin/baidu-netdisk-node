@@ -105,7 +105,7 @@
               </div>
               <!-- 用户信息 -->
               <div class="wb-user-info">
-                <div class="wb-user-name">{{ user.netdisk_name || '未登录' }}</div>
+                <div class="wb-user-name">{{ user.baidu_name || user.netdisk_name || '未登录' }}</div>
                 <div class="wb-user-sub">
                   {{ formatBytes(user.free) }} 可用
                 </div>

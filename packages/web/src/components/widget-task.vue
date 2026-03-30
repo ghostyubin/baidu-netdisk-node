@@ -279,7 +279,7 @@ function formatSpeed(bytesPerSec: number): string {
 .task-speed {
   font-size: 13px;
   font-weight: 600;
-  color: var(--text-secondary);
+  color: #3b82f6;
 }
 
 /* 方向标签 */
