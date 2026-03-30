@@ -82,7 +82,7 @@ async function getTasks() {
   } finally {
     timer.value = window.setTimeout(() => {
       getTasks()
-    }, 3000)
+    }, 1000)
   }
 }
 </script>

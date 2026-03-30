@@ -14,19 +14,18 @@
       :class="{ open: sidebarOpen }"
     >
       <!-- Logo / brand -->
-      <div
-        class="flex items-center gap-10 px-16 py-14"
-        style="border-bottom: 1px solid var(--border)"
-      >
-        <span
-          style="font-family: logo; font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: 0.5px"
-        >
-          BAIDU SYNC
-        </span>
+      <div class="wb-logo-area">
+        <div class="wb-logo-icon">
+          <i class="iconfont icon-cloud" style="font-size: 20px; color: #fff"></i>
+        </div>
+        <span class="wb-logo-text">BaiduSync</span>
       </div>
 
       <!-- Nav links -->
-      <nav class="flex flex-col gap-4 px-10 py-12" style="flex: 1; overflow-y: auto">
+      <nav class="wb-nav" style="flex: 1; overflow-y: auto">
+        <!-- 功能分组 -->
+        <div class="wb-nav-group-label">功能</div>
+
         <router-link
           :to="`/workbench/sync${currentSearchParams}`"
           class="wb-nav-link"
@@ -34,137 +33,131 @@
           @click="sidebarOpen = false"
         >
           <i class="iconfont icon-arrow-up-down wb-nav-icon"></i>
-          <span>同步</span>
+          <span class="wb-nav-text">同步任务</span>
+          <span
+            v-if="syncTaskCount > 0"
+            class="wb-nav-badge"
+          >{{ syncTaskCount }}</span>
         </router-link>
 
         <router-link
           :to="`/workbench/disk${currentSearchParams}`"
           class="wb-nav-link"
-          :class="{ active: isCurrentPath('/workbench/disk') }"
+          :class="{ active: isCurrentPath('/workbench/disk') && !isCurrentPath('/workbench/disk/tasks') }"
           @click="sidebarOpen = false"
         >
-          <i class="iconfont icon-cloud wb-nav-icon"></i>
-          <span>网盘</span>
+          <i class="iconfont icon-cloud wb-nav-icon" style="color: #f59e0b"></i>
+          <span class="wb-nav-text">网盘文件</span>
         </router-link>
+
+        <router-link
+          :to="`/workbench/disk/tasks${currentSearchParams}`"
+          class="wb-nav-link"
+          :class="{ active: isCurrentPath('/workbench/disk/tasks') }"
+          @click="sidebarOpen = false"
+        >
+          <i class="iconfont icon-download wb-nav-icon"></i>
+          <span class="wb-nav-text">传输任务</span>
+        </router-link>
+
+        <!-- 系统分组 -->
+        <div class="wb-nav-group-label" style="margin-top: 16px">系统</div>
+
+        <button
+          class="wb-nav-link"
+          :class="{ active: modConfigDialogVisible }"
+          @click="modConfigDialogVisible = true"
+        >
+          <!-- 齿轮 -->
+          <svg class="wb-nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.1 7.1 0 0 0-1.62-.94l-.36-2.54A.484.484 0 0 0 14 2h-4a.484.484 0 0 0-.48.41l-.36 2.54a7.47 7.47 0 0 0-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22L2.74 8.87a.47.47 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.36 1.04.67 1.62.94l.36 2.54c.05.27.29.47.56.47h4c.27 0 .51-.2.56-.47l.36-2.54a7.47 7.47 0 0 0 1.62-.94l2.39.96c.22.08.47.01.59-.22l1.92-3.32a.47.47 0 0 0-.12-.61l-2.01-1.58zM12 15.6A3.6 3.6 0 0 1 8.4 12 3.6 3.6 0 0 1 12 8.4a3.6 3.6 0 0 1 3.6 3.6 3.6 3.6 0 0 1-3.6 3.6z"/>
+          </svg>
+          <span class="wb-nav-text">全局设置</span>
+        </button>
+
+        <button
+          class="wb-nav-link"
+          :class="{ active: aboutDialogVisible }"
+          @click="aboutDialogVisible = true"
+        >
+          <!-- i 字母圆圈 -->
+          <span class="wb-nav-icon wb-nav-i-icon">i</span>
+          <span class="wb-nav-text">关于</span>
+        </button>
       </nav>
 
-      <!-- User card (bottom of sidebar) -->
-      <div
-        class="px-12 py-12"
-        style="border-top: 1px solid var(--border)"
-      >
+      <!-- Bottom user card -->
+      <div class="wb-user-area">
         <Popover position="TR">
           <template #trigger>
-            <div
-              class="wb-user-card"
-              style="cursor: pointer; border-radius: var(--radius-md); padding: 8px 10px; display: flex; align-items: center; gap: 10px; transition: background 0.15s"
-              @mouseenter="e => (e.currentTarget.style.background = 'var(--surface-2)')"
-              @mouseleave="e => (e.currentTarget.style.background = '')"
-            >
-              <!-- 有头像时显示图片，无头像时显示渐变圆+首字母 -->
+            <div class="wb-user-trigger">
+              <!-- 头像 -->
               <img
                 v-if="user.avatar_url"
-                class="h-32 w-32 rounded-full"
-                style="flex-shrink: 0; object-fit: cover"
+                class="wb-user-avatar"
                 :src="user.avatar_url"
               />
               <div
                 v-else
-                style="
-                  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
-                  background: linear-gradient(135deg, #4f6ef7, #a78bfa);
-                  display: flex; align-items: center; justify-content: center;
-                  font-size: 14px; color: white; font-weight: 700;
-                "
+                class="wb-user-avatar wb-user-avatar-fallback"
               >
                 {{ (user.netdisk_name || '?').charAt(0).toUpperCase() }}
               </div>
-              <div style="flex: 1; min-width: 0">
-                <div
-                  style="font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
-                >
-                  {{ user.netdisk_name || '未登录' }}
-                </div>
-                <div style="font-size: 11px; color: var(--text-muted)">
-                  {{ ((user.used / user.total) * 100 || 0).toFixed(1) }}% 已用
+              <!-- 用户信息 -->
+              <div class="wb-user-info">
+                <div class="wb-user-name">{{ user.netdisk_name || '未登录' }}</div>
+                <div class="wb-user-sub">
+                  {{ formatBytes(user.free) }} 可用
                 </div>
               </div>
+              <!-- 更多 -->
+              <span class="wb-user-more">···</span>
             </div>
           </template>
 
-          <!-- User popover content -->
-          <div class="flex flex-col bg-white p-16" style="min-width: 220px">
+          <!-- Popover content -->
+          <div class="wb-user-popover">
+            <!-- 存储进度 -->
+            <div class="wb-storage-row">
+              <span class="wb-storage-label">已用 {{ formatBytes(user.used) }}</span>
+              <span class="wb-storage-label">{{ formatBytes(user.total) }}</span>
+            </div>
             <Progress
               :percentage="(user.used / user.total) * 100"
-              class="my-8"
+              class="my-6"
             />
-            <div class="flex items-center justify-between text-13">
-              <span style="color: var(--text-secondary)">
-                {{ (user.used / 1024 / 1024 / 1024).toFixed(2) }} GB
-                <span style="color: var(--accent)">
-                  ({{ ((user.used / user.total) * 100).toFixed(2) }}%)
-                </span>
-              </span>
-              <span style="color: var(--text-muted)">
-                {{ (user.total / 1024 / 1024 / 1024).toFixed(2) }} GB
-              </span>
-            </div>
+
             <div class="mt-4 text-12" style="color: var(--text-secondary)">
               登录有效期:
               {{ ((user.expireAt - Date.now()) / 1000 / 60 / 60).toFixed(1) }}小时
-              <span class="text-red-500">
-                {{ user.expireAt - Date.now() <= 0 ? '已过期' : '' }}
-              </span>
+              <span class="text-red-500">{{ user.expireAt - Date.now() <= 0 ? '已过期' : '' }}</span>
             </div>
-            <div class="mt-12 flex items-center justify-end">
-              <Button
-                size="small"
-                type="error"
-                @click="removeBaiduUser"
-              >
-                移除此百度用户
-              </Button>
+
+            <div class="mt-12 flex flex-col gap-6">
+              <button class="wb-popover-btn" @click="onManageUserClick">
+                <!-- 人物 SVG -->
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                </svg>
+                管理百度用户
+              </button>
+              <Button size="small" type="error" @click="removeBaiduUser">移除此百度用户</Button>
             </div>
           </div>
         </Popover>
 
-        <!-- Action buttons row -->
-        <div class="mt-8 flex items-center gap-4">
-          <button
-            class="wb-sidebar-action-btn"
-            title="添加同步目录"
-            @click="folderDialogVisible = true"
-          >
-            <i class="iconfont icon-add-folder" style="font-size: 16px"></i>
-          </button>
-          <button
-            class="wb-sidebar-action-btn"
-            title="管理百度用户"
-            @click="onManageUserClick"
-          >
-            <i class="iconfont icon-options" style="font-size: 16px"></i>
-          </button>
-          <button
-            class="wb-sidebar-action-btn"
-            title="全局设置"
-            @click="modConfigDialogVisible = true"
-          >
-            <i class="iconfont icon-options" style="font-size: 14px; transform: rotate(90deg)"></i>
-          </button>
-          <button
-            class="wb-sidebar-action-btn"
-            title="关于"
-            @click="aboutDialogVisible = true"
-          >
-            <i class="iconfont icon-info" style="font-size: 16px"></i>
-          </button>
-          <button
-            class="wb-sidebar-action-btn"
-            title="退出登录"
-            @click="logout"
-          >
-            <i class="iconfont icon-close" style="font-size: 16px"></i>
-          </button>
+        <!-- 底部存储进度条 -->
+        <div class="wb-storage-bar-area">
+          <div class="wb-storage-bar-row">
+            <span>已用 {{ formatBytes(user.used) }}</span>
+            <span>{{ formatBytes(user.total) }}</span>
+          </div>
+          <div class="wb-storage-bar-track">
+            <div
+              class="wb-storage-bar-fill"
+              :style="`width: ${Math.min((user.used / user.total) * 100 || 0, 100)}%`"
+            ></div>
+          </div>
         </div>
       </div>
     </aside>
@@ -187,9 +180,8 @@
           style="font-family: logo; font-size: 16px; font-weight: 700; color: var(--accent)"
           class="wb-topbar-title"
         >
-          BAIDU SYNC
+          BaiduSync
         </span>
-        <!-- Right: add folder shortcut on mobile -->
         <div style="flex: 1"></div>
         <button
           class="wb-hamburger"
@@ -203,7 +195,13 @@
 
       <!-- Page content -->
       <main class="wb-main-content flex flex-1 flex-col" style="overflow: hidden">
-        <router-view></router-view>
+        <router-view v-slot="{ Component }">
+          <component
+            :is="Component"
+            :user-app-name="user.app_name"
+            @request-add-folder="folderDialogVisible = true"
+          />
+        </router-view>
       </main>
     </div>
 
@@ -264,7 +262,7 @@
 </template>
 
 <script setup lang="ts">
-import { httpDelUser, httpLogout, httpUsers } from '@src/common/api'
+import { httpDelUser, httpFoldersInfo, httpLogout, httpUsers } from '@src/common/api'
 import ModalAbout from '@src/components/modal-about.vue'
 import ModalFolder from '@src/components/modal-folder.vue'
 import ModalModConfig from '@src/components/modal-mod-config.vue'
@@ -299,6 +297,7 @@ const modConfigDialogVisible = ref(false)
 const aboutDialogVisible = ref(false)
 const folderDialogVisible = ref(false)
 const sidebarOpen = ref(false)
+const syncTaskCount = ref(0)
 
 const currentSearchParams = computed(() => window.location.search || '')
 
@@ -310,17 +309,38 @@ function goTo(path: string) {
 
 onMounted(() => {
   getUser()
+  pollSyncCount()
 })
 
 async function getUser() {
   try {
     const searchParams = new URLSearchParams(window.location.search)
     const userId = Object.fromEntries(searchParams.entries()).id
-    const users = (await httpUsers({ id: userId })).users
-    user.value = users.find(item => item.id === userId) || __USER_INIT__
+    if (userId) {
+      const users = (await httpUsers({ id: userId })).users
+      user.value = users.find(item => item.id === userId) || __USER_INIT__
+    } else {
+      const users = (await httpUsers()).users
+      user.value = users[0] || __USER_INIT__
+    }
   } catch (inErr) {
     Message.error(`获取用户失败: ${(inErr as Error).message}`)
   }
+}
+
+// 轮询同步任务数量（用于 badge）
+async function pollSyncCount() {
+  try {
+    const info = await httpFoldersInfo()
+    let count = 0
+    for (const f of info.folders) {
+      count += (f.uploadTasks?.length || 0) + (f.downloadTasks?.length || 0)
+    }
+    syncTaskCount.value = count
+  } catch {
+    // 静默失败
+  }
+  setTimeout(pollSyncCount, 2000)
 }
 
 function onManageUserClick() {
@@ -329,7 +349,6 @@ function onManageUserClick() {
 
 async function logout() {
   if (!(await Dialog.confirm({ title: '退出登录', okText: '登出' }))) return
-
   try {
     await httpLogout()
     location.href = '/login'
@@ -356,10 +375,59 @@ async function removeBaiduUser() {
     Message.error(`移除用户失败: ${(inErr as Error).message}`)
   }
 }
+
+function formatBytes(bytes: number): string {
+  if (!bytes) return '0 B'
+  if (bytes >= 1024 ** 4) return (bytes / 1024 ** 4).toFixed(2) + ' TB'
+  if (bytes >= 1024 ** 3) return (bytes / 1024 ** 3).toFixed(2) + ' GB'
+  if (bytes >= 1024 ** 2) return (bytes / 1024 ** 2).toFixed(2) + ' MB'
+  if (bytes >= 1024) return (bytes / 1024).toFixed(1) + ' KB'
+  return bytes + ' B'
+}
 </script>
 
 <style scoped>
-/* Nav link in sidebar */
+/* ── Logo ── */
+.wb-logo-area {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 16px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.wb-logo-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #4f6ef7, #a78bfa);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.wb-logo-text {
+  font-family: logo;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.3px;
+}
+
+/* ── Nav ── */
+.wb-nav {
+  padding: 12px 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.wb-nav-group-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px 6px;
+}
 .wb-nav-link {
   display: flex;
   align-items: center;
@@ -370,6 +438,11 @@ async function removeBaiduUser() {
   color: var(--text-secondary);
   text-decoration: none;
   transition: background 0.15s, color 0.15s;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
 }
 .wb-nav-link:hover {
   background: var(--accent-light);
@@ -383,28 +456,154 @@ async function removeBaiduUser() {
 .wb-nav-icon {
   font-size: 18px;
   flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+.wb-nav-i-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 700;
+  font-family: serif;
+  flex-shrink: 0;
+}
+.wb-nav-text {
+  flex: 1;
+}
+.wb-nav-badge {
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 100px;
+  padding: 1px 7px;
+  min-width: 20px;
+  text-align: center;
+  flex-shrink: 0;
 }
 
-/* Sidebar action buttons */
-.wb-sidebar-action-btn {
-  flex: 1;
+/* ── User area ── */
+.wb-user-area {
+  border-top: 1px solid var(--border);
+  padding: 14px 12px 12px;
+}
+.wb-user-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  padding: 4px 6px;
+  transition: background 0.15s;
+}
+.wb-user-trigger:hover {
+  background: var(--surface-2);
+}
+.wb-user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.wb-user-avatar-fallback {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 0;
-  border: none;
-  background: transparent;
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  background: linear-gradient(135deg, #4f6ef7, #a78bfa);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
 }
-.wb-sidebar-action-btn:hover {
-  background: var(--surface-2);
-  color: var(--accent);
+.wb-user-info {
+  flex: 1;
+  min-width: 0;
+}
+.wb-user-name {
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wb-user-sub {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+.wb-user-more {
+  font-size: 16px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  flex-shrink: 0;
 }
 
-/* Desktop: hide topbar entirely */
+/* ── Storage bar ── */
+.wb-storage-bar-area {
+  margin-top: 10px;
+}
+.wb-storage-bar-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+.wb-storage-bar-track {
+  height: 5px;
+  border-radius: 3px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.wb-storage-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #4f6ef7, #a78bfa);
+  transition: width 0.4s;
+}
+
+/* ── User popover ── */
+.wb-user-popover {
+  min-width: 220px;
+  padding: 16px;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+}
+.wb-storage-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.wb-storage-label {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.wb-popover-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 7px 10px;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.wb-popover-btn:hover {
+  background: var(--surface-2);
+}
+
+/* ── Desktop: hide topbar ── */
 @media (min-width: 601px) {
   .wb-topbar {
     display: none !important;
