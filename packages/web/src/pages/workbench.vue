@@ -58,8 +58,8 @@
             <div
               class="wb-user-card"
               style="cursor: pointer; border-radius: var(--radius-md); padding: 8px 10px; display: flex; align-items: center; gap: 10px; transition: background 0.15s"
-              @mouseenter="(e as MouseEvent) => ((e.currentTarget as HTMLElement).style.background = 'var(--surface-2)')"
-              @mouseleave="(e as MouseEvent) => ((e.currentTarget as HTMLElement).style.background = '')"
+              @mouseenter="e => (e.currentTarget.style.background = 'var(--surface-2)')"
+              @mouseleave="e => (e.currentTarget.style.background = '')"
             >
               <img
                 class="h-32 w-32 rounded-full"
