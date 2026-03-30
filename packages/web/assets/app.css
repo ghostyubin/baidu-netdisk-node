@@ -69,6 +69,7 @@ body,
   left: 0;
   right: 0;
   bottom: 0;
+  overflow: hidden;
 }
 
 body {
@@ -82,7 +83,6 @@ body {
   flex-shrink: 0;
   min-width: 0;
   min-height: 0;
-  overflow: hidden;
 }
 
 /* ============================================================
@@ -182,6 +182,9 @@ body {
 }
 
 /* Main content area */
+.wb-main-area {
+  overflow: hidden;
+}
 .wb-main-content {
   overflow: hidden;
 }
@@ -201,6 +204,9 @@ body {
 
 /* Phone (≤ 600px) */
 @media (max-width: 600px) {
+  .wb-main-area {
+    overflow: visible;
+  }
   .wb-sidebar {
     position: fixed;
     top: 0;
@@ -218,7 +224,7 @@ body {
   .wb-bottom-nav {
     display: flex;
   }
-  /* Push content above bottom nav */
+  /* Push content above bottom nav, allow scrolling */
   .wb-main-content {
     padding-bottom: var(--bottom-nav-h) !important;
     overflow-y: auto !important;

@@ -163,7 +163,7 @@
     </aside>
 
     <!-- ── Main area ── -->
-    <div class="flex flex-1 flex-col" style="min-width: 0; overflow: hidden">
+    <div class="flex flex-1 flex-col wb-main-area" style="min-width: 0">
       <!-- Top bar (mobile: hamburger + title; desktop: hidden) -->
       <header
         class="wb-topbar"

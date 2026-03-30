@@ -55,7 +55,7 @@
         >
           <!-- 卡片头 -->
           <div class="sync-card-hd">
-            <div class="flex items-center gap-8 flex-wrap">
+            <div class="sync-card-hd-info flex items-center gap-8 flex-wrap">
               <!-- 状态点 -->
               <span
                 class="sync-status-dot"
@@ -99,7 +99,7 @@
               </Tooltip>
             </div>
 
-            <div class="flex items-center gap-4">
+            <div class="sync-card-hd-actions flex items-center gap-4">
               <div v-if="folder.checking" class="loader h-24 w-24"></div>
               <button
                 v-else
@@ -439,35 +439,79 @@ function getNextTime(inTime: number) {
   }
   .sync-stats {
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    padding: 12px 16px 0;
+    gap: 6px;
+    padding: 8px 12px 0;
   }
   .sync-stat-card {
-    padding: 10px 10px;
-    gap: 8px;
-    flex-direction: column;
-    align-items: flex-start;
+    padding: 7px 8px;
+    gap: 7px;
+    flex-direction: row;
+    align-items: center;
   }
   .sync-stat-icon {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .sync-stat-icon svg,
+  .sync-stat-icon .iconfont {
+    font-size: 14px;
   }
   .sync-stat-label {
-    font-size: 11px;
+    font-size: 10px;
     white-space: nowrap;
     overflow: visible;
+    margin-bottom: 2px;
   }
   .sync-stat-num {
-    font-size: 22px;
+    font-size: 18px;
+    line-height: 1;
   }
   .sync-list {
     padding: 12px 16px 16px;
   }
   .sync-card-hd {
-    padding: 10px 12px;
+    padding: 8px 10px;
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+  /* 标题区（左侧）不换行，超出截断 */
+  .sync-card-hd-info {
+    flex-wrap: nowrap;
+    overflow: hidden;
+    flex: 1;
+    min-width: 0;
+    gap: 5px;
+  }
+  .sync-card-name {
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    flex-shrink: 1;
+  }
+  /* badge 压缩 */
+  .sync-badge {
+    font-size: 10px;
+    padding: 2px 5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  /* 操作按钮区不换行、不压缩 */
+  .sync-card-hd-actions {
+    flex-shrink: 0;
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+  .card-icon-btn {
+    width: 26px;
+    height: 26px;
+    padding: 0;
   }
   .sync-card-body {
-    padding: 10px 12px;
+    padding: 8px 10px;
   }
 }
 .sync-stat-num-default { color: var(--text-primary); }
