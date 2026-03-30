@@ -13,8 +13,11 @@
 - 2026-03-31：已将 GitHub Actions 工作流从 DockerHub 改为推送到 ghcr.io
   - 使用 `secrets.GITHUB_TOKEN` 鉴权，无需额外配置 secrets
   - 镜像地址：`ghcr.io/<owner>/baidu-netdisk-sync` 和 `ghcr.io/<owner>/baidu-netdisk-auth`
-  - 新增 GHA 构建缓存（cache-from/cache-to type=gha）加速后续构建
   - 触发方式：手动 workflow_dispatch + push tag（`srv-v*` / `xth-v*`）
+- 2026-03-31：大幅优化构建速度
+  - **Dockerfile** 改为多阶段构建：先 COPY `package.json`+lockfile 安装依赖（可缓存），再 COPY 源码构建，最后产物拷入纯净 runtime 镜像
+  - **Workflow** 改为矩阵并行策略：amd64 用 `ubuntu-latest`（原生），arm64 用 `ubuntu-24.04-arm`（GHA 原生 arm64，免费），armv7 在 arm64 runner 上跑 QEMU（比 amd64 模拟快很多）；三平台并行后 `merge` job 用 `imagetools create` 合并 manifest
+  - 镜像层缓存改为 `type=registry`，每个平台独立缓存 tag（`cache-amd64`/`cache-arm64`/`cache-armv7`），跨 run 命中率更高
 
 ## UI 现代化改版预览
 
