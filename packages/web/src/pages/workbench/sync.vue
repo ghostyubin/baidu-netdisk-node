@@ -127,10 +127,17 @@
                   <i class="iconfont icon-computer sync-path-icon"></i>
                   <span class="sync-path-text">{{ folder.local }}</span>
                 </div>
+                <!-- 移动端：竖向箭头 -->
                 <div class="sync-path-arrow-v">
-                  <i v-if="folder.direction === 1" class="iconfont icon-arrow-up-long font-bold text-orange-500"></i>
-                  <i v-else-if="folder.direction === 2" class="iconfont icon-arrow-up-long rotate-180 font-bold text-blue-500"></i>
-                  <i v-else class="iconfont icon-arrow-up-down left-orange-right-blue font-bold"></i>
+                  <svg v-if="folder.direction === 1" class="path-arrow-svg path-arrow-upload" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 13V3M8 3L4 7M8 3L12 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <svg v-else-if="folder.direction === 2" class="path-arrow-svg path-arrow-download" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 3v10M8 13L4 9M8 13L12 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <svg v-else class="path-arrow-svg path-arrow-both" viewBox="0 0 16 16" fill="none">
+                    <path d="M8 2v12M8 2L5 5M8 2L11 5M8 14L5 11M8 14L11 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
                 </div>
                 <div class="sync-path-row">
                   <i class="iconfont icon-cloud sync-path-icon"></i>
@@ -142,10 +149,17 @@
                   <i class="iconfont icon-computer sync-path-icon"></i>
                   <span class="sync-path-text">{{ folder.local }}</span>
                 </div>
+                <!-- 电脑端：横向箭头 -->
                 <div class="sync-path-arrow-h">
-                  <i v-if="folder.direction === 1" class="iconfont icon-arrow-up-long rotate-90 text-orange-500"></i>
-                  <i v-else-if="folder.direction === 2" class="iconfont icon-arrow-up-long -rotate-90 text-blue-500"></i>
-                  <i v-else class="iconfont icon-arrow-up-down left-orange-right-blue rotate-90"></i>
+                  <svg v-if="folder.direction === 1" class="path-arrow-svg path-arrow-upload" viewBox="0 0 20 12" fill="none">
+                    <path d="M1 6H18M18 6L13 1M18 6L13 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <svg v-else-if="folder.direction === 2" class="path-arrow-svg path-arrow-download" viewBox="0 0 20 12" fill="none">
+                    <path d="M19 6H2M2 6L7 1M2 6L7 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <svg v-else class="path-arrow-svg path-arrow-both" viewBox="0 0 24 12" fill="none">
+                    <path d="M1 6H22M22 6L17 1M22 6L17 11M1 6L6 1M1 6L6 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
                 </div>
                 <div class="sync-path-row">
                   <i class="iconfont icon-cloud sync-path-icon"></i>
@@ -522,21 +536,21 @@ function getNextTime(inTime: number) {
   background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 6px 12px;
+  padding: 3px 10px;
 }
 .sync-path-row {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   min-width: 0;
 }
 .sync-path-icon {
-  font-size: 15px;
+  font-size: 12px;
   flex-shrink: 0;
   color: var(--text-secondary);
 }
 .sync-path-text {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text-secondary);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -544,16 +558,27 @@ function getNextTime(inTime: number) {
   flex: 1;
   min-width: 0;
 }
-.sync-path-arrow-h {
-  font-size: 16px;
+/* SVG 箭头 */
+.path-arrow-svg {
   flex-shrink: 0;
+  display: block;
+}
+.sync-path-arrow-h .path-arrow-svg {
+  width: 22px;
+  height: 13px;
 }
 .sync-path-arrow-v {
   display: flex;
   justify-content: center;
-  font-size: 16px;
-  padding: 2px 0;
+  padding: 1px 0;
 }
+.sync-path-arrow-v .path-arrow-svg {
+  width: 13px;
+  height: 13px;
+}
+.path-arrow-upload  { color: #f97316; }
+.path-arrow-download { color: #4f6ef7; }
+.path-arrow-both    { color: #a855f7; }
 
 /* ── 队列 badge ── */
 .queue-badge {
@@ -678,10 +703,6 @@ function getNextTime(inTime: number) {
   }
   .sync-card-body {
     padding: 8px 10px;
-  }
-  .sync-paths-box {
-    padding: 5px 10px;
-    gap: 5px;
   }
 }
 </style>

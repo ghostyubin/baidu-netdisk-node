@@ -208,6 +208,9 @@ body {
 
 /* Phone (≤ 600px) */
 @media (max-width: 600px) {
+  :root {
+    --topbar-h: 36px;
+  }
   .wb-main-area {
     overflow: visible;
     display: flex;

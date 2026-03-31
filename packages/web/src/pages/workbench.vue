@@ -612,4 +612,20 @@ function formatBytes(bytes: number): string {
     display: none !important;
   }
 }
+
+/* ── Mobile: compact topbar ── */
+@media (max-width: 600px) {
+  .wb-topbar-title {
+    font-size: 13px !important;
+  }
+  .wb-hamburger i {
+    font-size: 16px !important;
+  }
+  .wb-topbar-about .wb-nav-i-icon {
+    font-size: 11px !important;
+    width: 17px !important;
+    height: 17px !important;
+    border-width: 1.5px !important;
+  }
+}
 </style>
