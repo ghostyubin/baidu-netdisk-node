@@ -138,7 +138,7 @@
                 </div>
               </template>
               <template v-else>
-                <div class="sync-path-row flex-1">
+                <div class="sync-path-row">
                   <i class="iconfont icon-computer sync-path-icon"></i>
                   <span class="sync-path-text">{{ folder.local }}</span>
                 </div>
@@ -147,7 +147,7 @@
                   <i v-else-if="folder.direction === 2" class="iconfont icon-arrow-up-long -rotate-90 text-blue-500"></i>
                   <i v-else class="iconfont icon-arrow-up-down left-orange-right-blue rotate-90"></i>
                 </div>
-                <div class="sync-path-row flex-1">
+                <div class="sync-path-row">
                   <i class="iconfont icon-cloud sync-path-icon"></i>
                   <span class="sync-path-text">{{ folder.remote }}</span>
                 </div>
@@ -517,16 +517,17 @@ function getNextTime(inTime: number) {
 .sync-paths-box {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: flex-start;
+  gap: 6px;
   background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 10px 12px;
+  padding: 6px 12px;
 }
 .sync-path-row {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   min-width: 0;
 }
 .sync-path-icon {
@@ -582,10 +583,26 @@ function getNextTime(inTime: number) {
     overflow: visible;
   }
   .sync-topbar {
-    padding: 12px 8px 0;
+    padding: 8px 8px 0;
   }
   .sync-title {
-    font-size: 18px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .sync-btn-refresh {
+    width: 28px;
+    height: 28px;
+  }
+  .sync-btn-refresh i {
+    font-size: 13px !important;
+  }
+  .sync-btn-add {
+    height: 28px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+  .sync-btn-add span {
+    font-size: 15px !important;
   }
   .sync-stats {
     grid-template-columns: repeat(3, 1fr);
@@ -661,6 +678,10 @@ function getNextTime(inTime: number) {
   }
   .sync-card-body {
     padding: 8px 10px;
+  }
+  .sync-paths-box {
+    padding: 5px 10px;
+    gap: 5px;
   }
 }
 </style>
